@@ -1,4 +1,4 @@
-package cn.xuqplus.controller;
+package cn.xuqplus.controller.session;
 
 import org.hibernate.Query;
 import org.hibernate.Session;
@@ -8,15 +8,14 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import javax.sql.DataSource;
 import java.util.List;
 
 @Controller
 @RequestMapping("")
 public class RemoveConnectionController {
+
     @Autowired
     SessionFactory sessionFactory;
-
 
     @RequestMapping("remove")
     @ResponseBody

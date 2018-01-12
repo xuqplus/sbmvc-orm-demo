@@ -1,0 +1,80 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:jpa="http://www.springframework.org/schema/data/jpa"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/data/jpa http://www.springframework.org/schema/data/jpa/spring-jpa.xsd   http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop.xsd">
+
+    <!-- jpa -->
+    <bean id="hibernateJpaVendorAdapter" class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter"/>
+    <!-- 事务管理 -->
+    <jpa:repositories base-package="cn.xuqplus.dao"
+                      entity-manager-factory-ref="entityManagerFactory"
+                      transaction-manager-ref="transactionManager"/>
+    <bean id="transactionManager" class="org.springframework.orm.jpa.JpaTransactionManager">
+        <property name="entityManagerFactory" ref="entityManagerFactory"/>
+    </bean>
+
+    <bean id="entityManagerFactory" class="org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean">
+        <property name="dataSource" ref="dataSource"/>
+        <property name="packagesToScan" value="cn.xuqplus.entity"/>
+        <property name="jpaVendorAdapter">
+            <bean class="org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter">
+                <property name="generateDdl" value="false"/>
+                <property name="showSql" value="true"/>
+            </bean>
+        </property>
+        <property name="jpaProperties">
+            <props>
+                <prop key="hibernate.dialect">org.hibernate.dialect.MySQL5Dialect</prop>
+                <prop key="hibernate.hbm2ddl.auto">update</prop>
+                <prop key="hibernate.format_sql">false</prop>
+                <prop key="hibernate.show_sql">true</prop>
+            </props>
+        </property>
+    </bean>
+
+    <!-- 属性文件2 -->
+    <!--<bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">-->
+    <!--<property name="locations">-->
+    <!--<list>-->
+    <!--<value>classpath:application.properties</value>-->
+    <!--</list>-->
+    <!--</property>-->
+    <!--</bean>-->
+
+    <bean id="dataSource" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close">
+        <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
+        <property name="url" value="${sh.jdbc.url}"/>
+        <property name="username" value="${sh.jdbc.username}"/>
+        <property name="password" value="${sh.jdbc.password}"/>
+        <property name="testWhileIdle" value="true"/>
+        <property name="testOnBorrow" value="false"/>
+        <property name="testOnReturn" value="false"/>
+
+        <!--最大活跃连接数-->
+        <property name="maxActive" value="100"/>
+        <!--从池中取连接最大等待时间-->
+        <property name="maxWait" value="5000"/>
+        <!--与eviction配合,维持空闲时连接数-->
+        <!--与validation配合,检查连接可用性-->
+        <property name="minIdle" value="10"/>
+        <!--检查连接是否可用-->
+        <property name="validationInterval" value="60000"/>
+        <!--最大连接数 没什么用-->
+        <property name="maxIdle" value="80"/>
+        <!--初始连接数 没什么用-->
+        <property name="initialSize" value="10"/>
+        <property name="validationQuery" value="SELECT 1"/>
+        <!--空闲连接回收器-->
+        <property name="timeBetweenEvictionRunsMillis" value="5000"/>
+        <!--超过此时长的空闲连接将被回收(就是关闭连接)-->
+        <property name="minEvictableIdleTimeMillis" value="30000"/>
+        <!--连接泄露回收器-->
+        <property name="removeAbandoned" value="true"/>
+        <property name="logAbandoned" value="false"/>
+        <!--连接泄露关闭时间(超过此时长的连接将被关闭,并且不管是不是空闲的 单位:秒)-->
+        <property name="removeAbandonedTimeout" value="60"/>
+    </bean>
+
+    <aop:aspectj-autoproxy/>
+</beans>

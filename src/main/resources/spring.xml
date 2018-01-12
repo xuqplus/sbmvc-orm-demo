@@ -3,95 +3,27 @@
        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns:context="http://www.springframework.org/schema/context"
        xsi:schemaLocation="http://www.springframework.org/schema/beans
-       http://www.springframework.org/schema/beans/spring-beans.xsd
-       http://www.springframework.org/schema/context
-       http://www.springframework.org/schema/context/spring-context.xsd">
-    <import resource="applicationContext.xml"></import>
+       http://www.springframework.org/schema/beans/spring-beans.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd">
+    <!--引入配置文件-->
+    <import resource="spring-jpa.xml"></import>
+    <import resource="spring-session.xml"></import>
 
-    <!-- 属性文件 -->
+    <!-- 属性文件1 -->
     <context:property-placeholder location="classpath:application.properties" system-properties-mode="NEVER"/>
 
-    <!--<bean id="dataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">-->
-    <!--<property name="jdbcUrl" value="${sh.jdbc.url}"></property>-->
-    <!--<property name="user" value="${sh.jdbc.username}"></property>-->
-    <!--<property name="password" value="${sh.jdbc.password}"></property>-->
-    <!--<property name="driverClass" value="com.mysql.jdbc.Driver"></property>-->
-    <!--<property name="maxPoolSize" value="40"></property>-->
-    <!--<property name="minPoolSize" value="1"></property>-->
-    <!--<property name="initialPoolSize" value="1"></property>-->
-    <!--<property name="maxIdleTime" value="20"></property>-->
-    <!--</bean>-->
-
-    <bean id="dataSource" class="org.apache.tomcat.jdbc.pool.DataSource" destroy-method="close">
-        <property name="poolProperties">
-            <bean class="org.apache.tomcat.jdbc.pool.PoolProperties">
-                <property name="driverClassName" value="com.mysql.jdbc.Driver"/>
-                <property name="url" value="${sh.jdbc.url}"/>
-                <property name="username" value="${sh.jdbc.username}"/>
-                <property name="password" value="${sh.jdbc.password}"/>
-
-                <property name="testWhileIdle" value="true"/>
-                <property name="testOnBorrow" value="false"/>
-                <property name="testOnReturn" value="false"/>
-
-                <!--最大活跃连接数-->
-                <property name="maxActive" value="100"/>
-                <!--从池中取连接最大等待时间-->
-                <property name="maxWait" value="5000"/>
-                <!--与eviction配合,维持空闲时连接数-->
-                <!--与validation配合,检查连接可用性-->
-                <property name="minIdle" value="5"/>
-                <!--检查连接是否可用-->
-                <property name="validationInterval" value="60000"/>
-                <!--最大连接数 没什么用-->
-                <property name="maxIdle" value="10"/>
-                <!--初始连接数 没什么用-->
-                <property name="initialSize" value="10"/>
-                <property name="validationQuery" value="SELECT 1"/>
-                <!--空闲连接回收器-->
-                <property name="timeBetweenEvictionRunsMillis" value="5000"/>
-                <!--超过此时长的空闲连接将被回收(就是关闭连接)-->
-                <property name="minEvictableIdleTimeMillis" value="30000"/>
-                <!--连接泄露回收器-->
-                <property name="removeAbandoned" value="true"/>
-                <property name="logAbandoned" value="false"/>
-                <!--连接泄露关闭时间(超过此时长的连接将被关闭,并且不管是不是空闲的 单位:秒)-->
-                <property name="removeAbandonedTimeout" value="1200"/>
-
-                <!--<property name="jmxEnabled" value="true"/>-->
-                <!--<property name="jdbcInterceptors"-->
-                <!--value="org.apache.tomcat.jdbc.pool.interceptor.ConnectionState;org.apache.tomcat.jdbc.pool.interceptor.StatementFinalizer"/>-->
+    <!--视图-->
+    <bean class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+        <property name="viewResolvers">
+            <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+                <property name="prefix" value="/WEB-INF/jsp/"></property>
+                <property name="suffix" value=".jsp"></property>
             </bean>
         </property>
-    </bean>
-
-    <bean id="sessionFactory" class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
-        <property name="dataSource" ref="dataSource"></property>
-        <property name="packagesToScan" value="cn.xuqplus.entity"></property>
-        <property name="hibernateProperties">
-            <props>
-                <prop key="hibernate.show_sql">true</prop>
-                <prop key="hibernate.format_sql">false</prop>
-                <prop key="hibernate.use_sql_comments">true</prop>
-                <prop key="hibernate.hbm2ddl.auto">create-drop</prop>
-                <prop key="hibernate.dialect">org.hibernate.dialect.MySQLDialect</prop>
-                <!-- ehcache -->
-                <!--<prop key="hibernate.cache.use_second_level_cache">true</prop>-->
-                <!--<prop key="hibernate.cache.use_query_cache">true</prop>-->
-                <!--<prop key="hibernate.cache.region.factory_class">org.hibernate.cache.ehcache.EhCacheRegionFactory</prop>-->
-                <!--<prop key="hibernate.cache.provider_configuration_file_resource_path">ehcache.xml</prop>-->
-            </props>
+        <property name="defaultViews">
+            <list>
+                <bean class="org.springframework.web.servlet.view.json.MappingJackson2JsonView"/>
+            </list>
         </property>
     </bean>
 
-    <!-- 配置事务管理器 -->
-    <bean id="transactionManager" class="org.springframework.orm.hibernate4.HibernateTransactionManager">
-        <property name="sessionFactory" ref="sessionFactory"/>
-    </bean>
-
-    <!--视图-->
-    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
-        <property name="prefix" value="/WEB-INF/jsp/"></property>
-        <property name="suffix" value=".jsp"></property>
-    </bean>
 </beans>

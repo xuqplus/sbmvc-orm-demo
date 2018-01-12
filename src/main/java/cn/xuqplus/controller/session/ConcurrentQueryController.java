@@ -1,30 +1,23 @@
-package cn.xuqplus.controller;
+package cn.xuqplus.controller.session;
 
-import cn.xuqplus.entity.User;
-import org.hibernate.HibernateException;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
-import org.hibernate.exception.GenericJDBCException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
-import org.springframework.stereotype.Repository;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
-import org.springframework.web.servlet.ModelAndView;
 
 import javax.sql.DataSource;
-import java.sql.SQLException;
 import java.util.*;
 import java.util.concurrent.ConcurrentLinkedQueue;
-import java.util.concurrent.LinkedBlockingDeque;
 
 @Controller
 @RequestMapping("")
-public class DemoController {
+public class ConcurrentQueryController {
 
-    private static Logger logger = LoggerFactory.getLogger(DemoController.class);
+    private static Logger logger = LoggerFactory.getLogger(ConcurrentQueryController.class);
 
     @Autowired
     SessionFactory sessionFactory;
