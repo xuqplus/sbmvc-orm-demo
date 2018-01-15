@@ -9,10 +9,19 @@ public abstract class AbstractEntity {
     private Long id;
     @Column(nullable = false)
     private Long createAt;
-    @Column(nullable = false)
     private Long modifyAt;
     @Version
     private Integer version;
+
+    @PrePersist
+    public void prePersist() {
+        this.createAt = System.currentTimeMillis();
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        this.modifyAt = System.currentTimeMillis();
+    }
 
     public Long getId() {
         return id;

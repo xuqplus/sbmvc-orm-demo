@@ -35,8 +35,6 @@ public class UserController {
         user.setUsername("xqq");
         user.setPassword("123456");
         user.setSex(AbstractUser.Sex.male);
-        user.setCreateAt(System.currentTimeMillis());
-        user.setModifyAt(System.currentTimeMillis());
         userDAO.save(user);
         return user;
     }

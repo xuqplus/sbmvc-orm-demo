@@ -57,13 +57,13 @@
         <property name="maxWait" value="5000"/>
         <!--与eviction配合,维持空闲时连接数-->
         <!--与validation配合,检查连接可用性-->
-        <property name="minIdle" value="10"/>
+        <property name="minIdle" value="2"/>
         <!--检查连接是否可用-->
         <property name="validationInterval" value="60000"/>
         <!--最大连接数 没什么用-->
         <property name="maxIdle" value="80"/>
         <!--初始连接数 没什么用-->
-        <property name="initialSize" value="10"/>
+        <property name="initialSize" value="2"/>
         <property name="validationQuery" value="SELECT 1"/>
         <!--空闲连接回收器-->
         <property name="timeBetweenEvictionRunsMillis" value="5000"/>
